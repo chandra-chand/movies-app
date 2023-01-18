@@ -1,0 +1,25 @@
+.header-container {
+  display: flex;
+  height: 10vh;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.home-popular-container {
+  display: flex;
+  flex-direction: row;
+}
+.home-list {
+  list-style-type: none;
+  margin-right: 10px;
+}
+.popular-list {
+  list-style-type: none;
+}
+.link-item {
+  text-decoration: none;
+}
+.search-icon {
+  align-self: center;
+  margin-right: 10px;
+}

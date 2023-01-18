@@ -1,0 +1,24 @@
+.movies-home-container {
+  background-image: url('https://res.cloudinary.com/djo72ivyd/image/upload/v1674037350/Image_klqm3t.png');
+
+  background-size: cover;
+  min-height: 100vh;
+}
+.movies-super-man-container {
+  margin-top: 100px;
+  margin-left: 50px;
+}
+.movies-super-man-head {
+  color: #ffffff;
+}
+.movies-super-man-para {
+  color: #ffffff;
+}
+.movies-super-man-button {
+  padding: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  border-width: 0px;
+  color: #171f46;
+}
