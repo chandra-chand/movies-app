@@ -3,6 +3,10 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 
 import Header from '../Header'
+import Trending from '../Trending'
+import Originals from '../Originals'
+import Load from '../Load'
+import Footer from '../Footer'
 
 import './index.css'
 
@@ -14,14 +18,16 @@ const apiStatusConstants = {
 }
 
 class MoviesHome extends Component {
-  state = {apiStatus: apiStatusConstants.initial, videos: []}
+  state = {apiStatus: apiStatusConstants.initial, poster: []}
 
   componentDidMount() {
-    this.getTrendingMovies()
+    this.getMovies()
   }
 
-  getTrendingMovies = async () => {
+  getMovies = async () => {
     const jwtToken = Cookies.get('jwt_token')
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+
     const url = 'https://apis.ccbp.in/movies-app/trending-movies'
     const options = {
       method: 'GET',
@@ -40,7 +46,7 @@ class MoviesHome extends Component {
         title: each.title,
       }))
       this.setState({
-        videos: updatedData,
+        poster: updatedData,
         apiStatus: apiStatusConstants.success,
       })
     } else {
@@ -48,22 +54,80 @@ class MoviesHome extends Component {
     }
   }
 
-  render() {
+  onClickPlay = () => {
+    this.poster()
+  }
+
+  renderFailure = () => (
+    <div className="failure-container">
+      <img
+        src="https://res.cloudinary.com/djo72ivyd/image/upload/v1675304366/error_Icon_jurt8j.png"
+        alt="error"
+      />
+      <h1 className="failure-head">Something went wrong. Please try again</h1>
+      <button className="button" type="button" onClick={this.onClickPlay}>
+        Try Again
+      </button>
+    </div>
+  )
+
+  renderLoader = () => <Load />
+
+  renderSuccess = () => {
+    const {poster} = this.state
+    const randomPoster = poster[Math.floor(Math.random() * poster.length)]
+    const bgImage = randomPoster.backdropPath
+    const titleHead = randomPoster.title
+    const overviewPara = randomPoster.overview
+
     return (
-      <div className="movies-home-container">
+      <div
+        className="poster-container"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: '100% 100%',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <Header />
-        <div className="movies-super-man-container">
-          <h1 className="movies-super-man-head">Super Man</h1>
-          <p className="movies-super-man-para">
-            Superman is a fictional superhero who first <br />
-            appeared in American comic books published by
-            <br /> DC Comics.
-          </p>
-          <button className="movies-super-man-button" type="button">
+        <div className="home-container">
+          <h1 className="home-head">{titleHead}</h1>
+          <p className="home-para">{overviewPara}</p>
+          <button type="button" className="home-button">
             Play
           </button>
         </div>
       </div>
+    )
+  }
+
+  renderPoster = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.renderSuccess()
+      case apiStatusConstants.failure:
+        return this.renderFailure()
+      case apiStatusConstants.inProgress:
+        return this.renderLoader()
+      default:
+        return null
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <div className="movies-home-container">
+          {this.renderPoster()}
+          <h1 className="trending">Trending</h1>
+          <Trending />
+          <h1 className="originals">Originals</h1>
+          <Originals />
+        </div>
+        <Footer />
+      </>
     )
   }
 }

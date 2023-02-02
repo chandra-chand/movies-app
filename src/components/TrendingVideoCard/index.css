@@ -1,0 +1,11 @@
+.slick-img {
+  height: 100px;
+  width: 100px;
+}
+.slick-list-item {
+  list-style-type: none;
+}
+.slick-container {
+  display: flex;
+  flex-direction: row;
+}
